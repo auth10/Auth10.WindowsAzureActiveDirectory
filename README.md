@@ -49,6 +49,9 @@ $appPrincipalId = "2829c758-2bef-....-a685-717089474509"
 $sp = New-MsolServicePrincipal -ServicePrincipalNames @("yourappname/some.host.com") -AppPrincipalId $appPrincipalId -DisplayName "yourappname" -Type Symmetric -Value $symmetricKey -Usage Verify -EndDate "11/11/2014" 
 ```
 
+# assign permissions to that principal to query the graph (Service Support Administrator == read, Company Administrator == readwrite)
+Add-MsolRoleMember -RoleMemberType ServicePrincipal -RoleName "Service Support Administrator" -RoleMemberObjectId $sp.ObjectId
+
 ### Getting your tenantId
 
 ```powershell
