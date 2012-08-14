@@ -50,8 +50,9 @@ namespace Auth10.WindowsAzureActiveDirectory.Tests
             var groups = this.graph.GetUserSecurityGroups(new Guid("3c6960fd-cb81-407d-b1a9-10ef594a9d1f"));
 
             Assert.IsNotNull(groups);
-            Assert.AreEqual(1, groups.Count);
+            Assert.AreEqual(2, groups.Count);
             Assert.AreEqual("Company Administrator", groups[0].DisplayName);
+            Assert.AreEqual("Test Group", groups[1].DisplayName);
         }
 
         [TestMethod]
@@ -60,8 +61,9 @@ namespace Auth10.WindowsAzureActiveDirectory.Tests
             var groups = this.graph.GetUserSecurityGroups("matias@auth10test2.onmicrosoft.com");
 
             Assert.IsNotNull(groups);
-            Assert.AreEqual(1, groups.Count);
+            Assert.AreEqual(2, groups.Count);
             Assert.AreEqual("Company Administrator", groups[0].DisplayName);
+            Assert.AreEqual("Test Group", groups[1].DisplayName);
         }
     }
 }
