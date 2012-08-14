@@ -1,6 +1,9 @@
-# Windows Azure Active Directory Graph
+# Windows Azure Active Directory Graph API
 
-This library is based on various sample code from Microsoft and it works with the Windows Azure Active Directory Preview.
+* This library simplifies access to Windows Azure Active Directory from .NET applications. 
+* It is derived from original samples included in the Windows Azure Active Directory Preview. The original samples are more of proof of concepts and they were based on a static API (`AzureADGraph.GetUsers`) that wasn't thread safe. The paging implementation was akwards as well. We are cleaning that up. Also removed the dependency with AAL until it doesn't requires the c++ runtime dependency.  
+* It includes integration tests with a dev tenant
+* It provides a NuGet
 
 ## Usage
 
@@ -46,7 +49,7 @@ Connect-MsolService
 $symmetricKey = "FStnXT1QON84B............5onYtzJ91Gg/JH/Jxiw"
 $appPrincipalId = "2829c758-2bef-....-a685-717089474509"
 
-$sp = New-MsolServicePrincipal -ServicePrincipalNames @("yourappname/some.host.com") -AppPrincipalId $appPrincipalId -DisplayName "yourappname" -Type Symmetric -Value $symmetricKey -Usage Verify -EndDate "11/11/2014" 
+$sp = New-MsolServicePrincipal -ServicePrincipalNames @("yourappname/some.host.com") -AppPrincipalId $appPrincipalId -DisplayName "yourappname" -Type Symmetric -Value $symmetricKey -Usage Verify -StartDate "1/1/2012" -EndDate "11/11/2014" 
 ```
 
 # assign permissions to that principal to query the graph (Service Support Administrator == read, Company Administrator == readwrite)
