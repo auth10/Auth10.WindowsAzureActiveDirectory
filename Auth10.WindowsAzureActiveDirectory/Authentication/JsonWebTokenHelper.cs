@@ -190,7 +190,7 @@ namespace Auth10.WindowsAzureActiveDirectory.Authentication
         /// <param name="assertion">Assertion token.</param>
         /// <param name="resource">ExpiresIn name.</param>
         /// <returns>The OAuth access token.</returns>
-        public static string GetOAuthAccessTokenFromACS(string stsUrl, string assertion, string resource)
+        public static OAuthAccessToken GetOAuthAccessTokenFromACS(string stsUrl, string assertion, string resource)
         {
             string accessToken = string.Empty;
 
@@ -210,9 +210,11 @@ namespace Auth10.WindowsAzureActiveDirectory.Authentication
             OAuthAccessTokenResponseContract response = 
                 (OAuthAccessTokenResponseContract) jsonSerializer.ReadObject(ms);
 
-            accessToken = response.AccessToken;
-
-            return accessToken;
+            return new OAuthAccessToken
+            {
+                AccessToken = response.AccessToken,
+                ExpiresOn = DateTime.Now.ToUniversalTime().AddSeconds(response.ExpiresIn)
+            };
         }
 
         /// <summary>

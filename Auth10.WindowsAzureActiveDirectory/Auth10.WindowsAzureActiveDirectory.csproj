@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\OAuthAccessToken.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\DataServiceExceptionUtil.cs" />
     <Compile Include="Infrastructure\DirectoryDataServicesProxy.cs" />

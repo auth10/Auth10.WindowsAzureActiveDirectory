@@ -45,7 +45,7 @@ namespace Auth10.WindowsAzureActiveDirectory
             this.spnAppPrincipalId = spnAppPrincipalId;
         }
 
-        public string GetAccessToken()
+        public OAuthAccessToken GetAccessToken()
         {
             string stsUrl = "https://accounts.accesscontrol.windows.net/tokens/OAuth/2";
             string AcsPrincipalId = "00000001-0000-0000-c000-000000000000";
@@ -64,7 +64,7 @@ namespace Auth10.WindowsAzureActiveDirectory
             string jwt = JsonWebTokenHelper.GenerateAssertion(webToken, this.spnSymmetricKey);
 
             string resource = String.Format("{0}/{1}@{2}", protectedResourcePrincipalId, protectedResourceHostName, tenantId);
-            string accessToken = JsonWebTokenHelper.GetOAuthAccessTokenFromACS(stsUrl, jwt, resource);
+            OAuthAccessToken accessToken = JsonWebTokenHelper.GetOAuthAccessTokenFromACS(stsUrl, jwt, resource);
 
             return accessToken;
         }
