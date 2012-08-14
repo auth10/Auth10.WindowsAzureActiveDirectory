@@ -41,12 +41,12 @@ namespace Auth10.WindowsAzureActiveDirectory
 
         private readonly Uri connectionUri;
 
-        private readonly int defaultPageSize;
+        public int DefaultPageSize { get; set; }
 
         public DirectoryGraph(string tenantId, string accessToken, string dataContractVersion = "0.5", int defaultPageSize = 20)
         {
             this.dataContractVersion = dataContractVersion;
-            this.defaultPageSize = defaultPageSize;
+            this.DefaultPageSize = defaultPageSize;
 
             this.connectionUri = new Uri(string.Format(@"https://directory.windows.net/{0}", tenantId));
             this.dataService = new DirectoryDataServiceProxy(connectionUri);
@@ -71,7 +71,7 @@ namespace Auth10.WindowsAzureActiveDirectory
             List<User> results = null;
             InvokeOperationWithRetry(() =>
             {
-                var users = dataService.Users.AddQueryOption("$top", this.defaultPageSize);
+                var users = dataService.Users.AddQueryOption("$top", this.DefaultPageSize);
                 var userQuery = users.Execute();
                 results = userQuery.ToList();
 
@@ -115,7 +115,7 @@ namespace Auth10.WindowsAzureActiveDirectory
             List<User> results = null;
             InvokeOperationWithRetry(() =>
             {
-                var page = new Uri(string.Format("{0}&$top={1}", linkUrl, this.defaultPageSize));
+                var page = new Uri(string.Format("{0}&$top={1}", linkUrl, this.DefaultPageSize));
 
                 var userQuery = dataService.Execute<User>(page);
 
@@ -164,11 +164,13 @@ namespace Auth10.WindowsAzureActiveDirectory
         }
 
         /// <summary>
-        /// Execute a dataservice query
+        /// Search users specifying a field and a value for that field (exact match, not like because it is not supported today)
         /// </summary>
         /// <param name="value">Request query</param>
+        /// <param name="field">The user field you wan to search on. Default: DisplayName</param>
+        /// <param name="nextPageUrl">If results are more than <see cref="DefaultPageSize"/> it will include the next page url to be used with <see cref="GetUsersNextPage"/></param>
         /// <returns>List of users.</returns>
-        public List<User> ExecuteQuery(string value, out string nextPageUrl, string field = "Display Name")
+        public List<User> SearchUsers(string value, out string nextPageUrl, string field = "DisplayName")
         {
             List<User> results = null;
             string next = null;
@@ -176,7 +178,7 @@ namespace Auth10.WindowsAzureActiveDirectory
             {
                 // create the filtered query
                 var users = dataService.Users.AddQueryOption("$filter", field + " eq '" + value + "'")
-                                             .AddQueryOption("$top", this.defaultPageSize);
+                                             .AddQueryOption("$top", this.DefaultPageSize);
                 
                 var userQuery = users.Execute();
                 results = userQuery.ToList();
@@ -256,7 +258,7 @@ namespace Auth10.WindowsAzureActiveDirectory
         public List<Group> GetUserSecurityGroups(string email)
         {
             string next;
-            List<User> users = ExecuteQuery(email, out next, "Mail");
+            List<User> users = SearchUsers(email, out next, "Mail");
             if (users.Count == 1)
             {
                 return this.GetUserSecurityGroups(users[0].ObjectId.Value);
