@@ -7,9 +7,12 @@
 
 ## Usage
 
+Install the NuGet package
 ```
 Install-Package Auth10.WindowsAzureActiveDirectory
 ```
+
+Here are some sample usage. You can look at the tests as well.
 
 ```cs
 // authenticate
