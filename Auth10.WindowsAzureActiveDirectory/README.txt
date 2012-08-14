@@ -44,7 +44,7 @@ This library is based on various sample code from Microsoft and it works with th
 	$symmetricKey = "FStnXT1QON84B............5onYtzJ91Gg/JH/Jxiw"
 	$appPrincipalId = "2829c758-2bef-....-a685-717089474509"
 
-	$sp = New-MsolServicePrincipal -ServicePrincipalNames @("yourappname/some.host.com") -AppPrincipalId $appPrincipalId -DisplayName "yourappname" -Type Symmetric -Value $symmetricKey -Usage Verify -EndDate "11/11/2014" 
+	$sp = New-MsolServicePrincipal -ServicePrincipalNames @("yourappname/some.host.com") -AppPrincipalId $appPrincipalId -DisplayName "yourappname" -Type Symmetric -Value $symmetricKey -Usage Verify -StartDate "1/1/2012" -EndDate "11/11/2014" 
 ```
 
 ### Getting your tenantId
