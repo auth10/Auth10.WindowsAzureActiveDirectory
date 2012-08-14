@@ -166,16 +166,16 @@ namespace Auth10.WindowsAzureActiveDirectory
         /// <summary>
         /// Execute a dataservice query
         /// </summary>
-        /// <param name="query">Request query</param>
+        /// <param name="value">Request query</param>
         /// <returns>List of users.</returns>
-        public List<User> ExecuteQuery(string query, out string nextPageUrl)
+        public List<User> ExecuteQuery(string value, out string nextPageUrl, string field = "Display Name")
         {
             List<User> results = null;
             string next = null;
             InvokeOperationWithRetry(() =>
             {
                 // create the filtered query
-                var users = dataService.Users.AddQueryOption("$filter", "DisplayName eq '" + query + "'")
+                var users = dataService.Users.AddQueryOption("$filter", field + " eq '" + value + "'")
                                              .AddQueryOption("$top", this.defaultPageSize);
                 
                 var userQuery = users.Execute();
@@ -251,6 +251,18 @@ namespace Auth10.WindowsAzureActiveDirectory
             });
 
             return results;
+        }
+
+        public List<Group> GetUserSecurityGroups(string email)
+        {
+            string next;
+            List<User> users = ExecuteQuery(email, out next, "Mail");
+            if (users.Count == 1)
+            {
+                return this.GetUserSecurityGroups(users[0].ObjectId.Value);
+            }
+
+            return null;
         }
 
         /// <summary>
